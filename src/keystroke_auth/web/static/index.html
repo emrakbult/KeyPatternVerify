@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KeyPatternVerify</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Behavioral Biometric Authentication</p>
+          <h1>KeyPatternVerify</h1>
+        </div>
+        <div class="status-pill" id="datasetStatus">Loading dataset</div>
+      </header>
+
+      <main>
+        <section class="custom-section" aria-label="Custom password authentication">
+          <aside class="control-panel" aria-label="Custom profile settings">
+            <div class="panel-header">
+              <h2>Password Profile</h2>
+              <p>Enroll a local typing profile, then let someone else try the same password.</p>
+            </div>
+
+            <label>
+              Profile Name
+              <input id="customProfileName" type="text" maxlength="64" value="demo-user">
+            </label>
+
+            <label>
+              Password
+              <input id="customPassword" type="text" maxlength="64" value="KeyPatternVerify">
+            </label>
+
+            <div class="inline-fields">
+              <label>
+                Samples
+                <input id="customTargetSamples" type="number" min="3" max="50" value="8">
+              </label>
+              <label>
+                k
+                <input id="customKValue" type="number" min="1" max="50" value="3">
+              </label>
+            </div>
+
+            <div class="button-row">
+              <button id="startEnrollButton" type="button">Start Enroll</button>
+              <button id="saveProfileButton" type="button" class="secondary" disabled>Save Profile</button>
+            </div>
+
+            <div class="divider"></div>
+
+            <label>
+              Saved Profile
+              <select id="customProfileSelect"></select>
+            </label>
+
+            <div class="button-row">
+              <button id="startVerifyButton" type="button" class="secondary">Start Verify</button>
+              <button id="deleteProfileButton" type="button" class="ghost">Delete</button>
+            </div>
+          </aside>
+
+          <section class="capture-panel" aria-label="Custom password capture">
+            <div class="panel-header split">
+              <div>
+                <h2>Custom Capture</h2>
+                <p id="customPasswordLabel">Start enrollment or verification</p>
+              </div>
+              <button id="resetCustomCaptureButton" type="button" class="ghost">Reset</button>
+            </div>
+
+            <div id="customCaptureZone" class="capture-zone" tabindex="0">
+              <div class="typed-text" id="customTypedText"></div>
+              <div class="expected-text" id="customExpectedText">No custom password selected</div>
+              <div class="capture-status" id="customCaptureStatus">Choose a custom action first</div>
+            </div>
+
+            <div class="custom-decision-grid">
+              <article>
+                <span>Mode</span>
+                <strong id="customModeValue">Idle</strong>
+              </article>
+              <article>
+                <span>Samples</span>
+                <strong id="customSamplesValue">0/0</strong>
+              </article>
+              <article>
+                <span>Decision</span>
+                <strong id="customDecisionValue">-</strong>
+              </article>
+              <article>
+                <span>Score</span>
+                <strong id="customScoreValue">-</strong>
+              </article>
+              <article>
+                <span>Threshold</span>
+                <strong id="customThresholdValue">-</strong>
+              </article>
+            </div>
+
+            <div class="feature-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Custom Feature</th>
+                    <th>Seconds</th>
+                  </tr>
+                </thead>
+                <tbody id="customFeatureRows">
+                  <tr>
+                    <td colspan="2">No custom attempt scored yet</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <details class="research-mode" id="researchMode">
+          <summary>
+            <span>Evaluation / Research Mode</span>
+            <small>CMU dataset benchmark, k-NN settings, FAR, FRR, and EER</small>
+          </summary>
+
+          <section class="metrics-strip" aria-label="Evaluation summary">
+            <article class="metric">
+              <span>Subjects</span>
+              <strong id="metricSubjects">-</strong>
+            </article>
+            <article class="metric">
+              <span>Mean EER</span>
+              <strong id="metricEer">-</strong>
+            </article>
+            <article class="metric">
+              <span>FAR@EER</span>
+              <strong id="metricFar">-</strong>
+            </article>
+            <article class="metric">
+              <span>FRR@EER</span>
+              <strong id="metricFrr">-</strong>
+            </article>
+            <article class="metric">
+              <span>Operating FAR</span>
+              <strong id="metricOpFar">-</strong>
+            </article>
+            <article class="metric">
+              <span>Operating FRR</span>
+              <strong id="metricOpFrr">-</strong>
+            </article>
+          </section>
+
+          <section class="workbench">
+            <aside class="control-panel" aria-label="Model settings">
+              <div class="panel-header">
+                <h2>Dataset Model Settings</h2>
+              </div>
+
+              <label>
+                Subject
+                <select id="subjectSelect"></select>
+              </label>
+
+              <label>
+                Feature Set
+                <select id="featureSet">
+                  <option value="all">All timings</option>
+                  <option value="hold">Hold / dwell</option>
+                  <option value="latency">Latency</option>
+                  <option value="dd">DD only</option>
+                  <option value="ud">UD only</option>
+                </select>
+              </label>
+
+              <label>
+                Threshold
+                <select id="thresholdSource">
+                  <option value="train-quantile">Train quantile</option>
+                  <option value="eer">EER benchmark</option>
+                </select>
+              </label>
+
+              <div class="inline-fields">
+                <label>
+                  k
+                  <input id="kValue" type="number" min="1" max="50" value="5">
+                </label>
+                <label>
+                  Quantile
+                  <input id="quantileValue" type="number" min="0.5" max="0.999" step="0.001" value="0.95">
+                </label>
+              </div>
+
+              <div class="button-row">
+                <button id="runEvaluationButton" type="button">Run Evaluation</button>
+                <button id="simulateButton" type="button" class="secondary">Simulate</button>
+              </div>
+            </aside>
+
+            <section class="capture-panel" aria-label="Dataset live authentication">
+              <div class="panel-header split">
+                <div>
+                  <h2>Dataset Live Simulation</h2>
+                  <p id="passwordLabel">.tie5Roanl + Enter</p>
+                </div>
+                <button id="resetCaptureButton" type="button" class="ghost">Reset</button>
+              </div>
+
+              <div id="captureZone" class="capture-zone" tabindex="0">
+                <div class="typed-text" id="typedText"></div>
+                <div class="expected-text" id="expectedText">.tie5Roanl</div>
+                <div class="capture-status" id="captureStatus">Focus here and type the password</div>
+              </div>
+
+              <div class="decision-grid">
+                <article>
+                  <span>Decision</span>
+                  <strong id="decisionValue">-</strong>
+                </article>
+                <article>
+                  <span>Score</span>
+                  <strong id="scoreValue">-</strong>
+                </article>
+                <article>
+                  <span>Threshold</span>
+                  <strong id="thresholdValue">-</strong>
+                </article>
+              </div>
+
+              <div class="feature-table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      <th>Seconds</th>
+                    </tr>
+                  </thead>
+                  <tbody id="featureRows">
+                    <tr>
+                      <td colspan="2">No attempt scored yet</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <section class="charts-grid" aria-label="Evaluation charts">
+            <article class="chart-panel">
+              <div class="panel-header split">
+                <h2>EER by Subject</h2>
+                <span id="resultsPath"></span>
+              </div>
+              <canvas id="eerChart" height="130"></canvas>
+            </article>
+
+            <article class="chart-panel">
+              <div class="panel-header split">
+                <h2>FAR / FRR</h2>
+                <span id="simulationSummary"></span>
+              </div>
+              <canvas id="ratesChart" height="130"></canvas>
+            </article>
+          </section>
+
+          <section class="results-section" aria-label="Per-subject results">
+            <div class="panel-header split">
+              <h2>Subject Results</h2>
+              <span id="tableSummary"></span>
+            </div>
+            <div class="results-table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>EER</th>
+                    <th>FAR@EER</th>
+                    <th>FRR@EER</th>
+                    <th>Operating FAR</th>
+                    <th>Operating FRR</th>
+                  </tr>
+                </thead>
+                <tbody id="resultsRows"></tbody>
+              </table>
+            </div>
+          </section>
+        </details>
+      </main>
+    </div>
+
+    <script src="/static/vendor/chart.umd.min.js"></script>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
