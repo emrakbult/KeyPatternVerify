@@ -136,4 +136,4 @@ hesaplar ve esige gore kabul veya ret karari verir.
 
 ## Kaynak
 
-- CMU Keystroke Dynamics Benchmark Dataset: https://www.cs.cmu.edu/~keystroke/
+-  CMU Keystroke Dynamics Benchmark Dataset: https://www.cs.cmu.edu/~keystroke/
