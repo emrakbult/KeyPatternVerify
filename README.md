@@ -1,10 +1,14 @@
 # KeyPatternVerify
 
-Keystroke Dynamics ile Kimlik Dogrulama
+## Keystroke Dynamics ile Kimlik Doğrulama
 
-Bu proje CMU Keystroke Dynamics Benchmark Dataset uzerinde davranissal biyometri ile kimlik dogrulama yapar. Varsayilan model, her kullanici icin ayri egitilen one-class k-NN anomalilik skorlayicisidir.
+Bu proje, **Biyometrik Tanıma Sistemleri dersi kapsamında** geliştirilmiş bir davranışsal biyometri çalışmasıdır.
 
-CMU veri setinde 51 kullanici, `.tie5Roanl` parolasini 8 oturumda toplam 400 kez yazmistir. Resmi protokole uygun olarak her hedef kullanici icin ilk 200 ornek egitimde, son 200 gercek kullanici testi icin, diger kullanicilarin ilk 5 ornegi ise sahte giris testi icin kullanilir.
+CMU Keystroke Dynamics Benchmark Dataset üzerinde keystroke dynamics kullanarak kimlik doğrulama gerçekleştirir. Varsayılan model, her kullanıcı için ayrı eğitilen one-class k-NN anomalilik skorlayıcısıdır.
+
+CMU veri setinde 51 kullanıcı, `.tie5Roanl` parolasını 8 oturumda toplam 400 kez yazmıştır. Resmi protokole uygun olarak her hedef kullanıcı için ilk 200 örnek eğitimde, son 200 gerçek kullanıcı testi için, diğer kullanıcıların ilk 5 örneği ise sahte giriş testi için kullanılır.
+
+Bu çalışma bir ders projesidir ve üretim ortamında kullanılmak üzere geliştirilmiş tamamlanmış bir biyometrik kimlik doğrulama sistemi olarak değerlendirilmemelidir.
 
 ## Kurulum
 
